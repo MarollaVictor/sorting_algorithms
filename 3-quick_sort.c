@@ -36,13 +36,10 @@ size_t lomuto(int *array, size_t size, ssize_t l, ssize_t h)
 {
 	int i, j, pivot = array[h];
 
-	i = j;
-	while(j < h)
-	{
+	for (i = j = l; j < h; j++)
 		if (array[j] < pivot)
 			swap(array, size, &array[j], &array[i++]);
-		j++;
-	}
+
 	swap(array, size, &array[i], &array[h]);
 
 	return (i);
