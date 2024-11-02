@@ -1,69 +1,67 @@
 #include "sort.h"
-#include <stdio.h>
 
 /**
- *swap_node - swap a node for another
- *@node: first node
- *@list: list of nodes
- *Return: return a pointer to a node which was enter it
+ * swap - swaps two node heads
+ * @head: head_node of the list
+ * @node1: first node
+ * @node2: second node
  */
 
-listint_t *swap_node(listint_t *node, listint_t **list)
+void swap(listint_t **head, listint_t *node1, listint_t *node2)
 {
-	listint_t *back = node->prev, *current = node;
-	/*NULL, 19, 48, 9, 71, 13, NULL*/
+	listint_t *prev, *next;
 
-	back->next = current->next;
-	if (current->next)
-		current->next->prev = back;
-	current->next = back;
-	current->prev = back->prev;
-	back->prev = current;
-	if (current->prev)
-		current->prev->next = current;
+	prev = node1->prev;
+	next = node2->next;
+
+	if (prev != NULL)
+		prev->next = node2;
 	else
-		*list = current;
-	return (current);
+		*head = node2;
+	node1->prev = node2;
+	node1->next = next;
+	node2->prev = prev;
+	node2->next = node1;
+	if (next)
+		next->prev = node1;
 }
+
 /**
- *cocktail_sort_list - a cocktail sort method
- *@list: list of elements
+ * cocktail_sort_list - sort using the cocktail sort algorithm
+ * @list: list to be sorted
  */
 
 void cocktail_sort_list(listint_t **list)
 {
-	listint_t *node;
-	int swap_done = 1;
+	listint_t *head;
+	int flag = 0;
 
-	if (list == '\0' || (*list) == '\0' || (*list)->next == '\0')
+	if (!list || !*list || !(*list)->next)
 		return;
-	node = *list;
-	while (swap_done == 1)
-	{
-		swap_done = 0;
-		while (node->next)
+
+	do {
+		for (head = *list; head->next != NULL; head = head->next)
 		{
-			if (node->n > node->next->n)
+			if (head->n > head->next->n)
 			{
-				node = swap_node(node->next, list);
-				swap_done = 1;
+				swap(list, head, head->next);
 				print_list(*list);
+				flag = 1;
+				head = head->prev;
 			}
-			node = node->next;
 		}
-		if (swap_done == 0)
+		if (flag == 0)
 			break;
-		swap_done = 0;
-		while (node->prev)
+		flag = 0;
+		for (; head->prev != NULL; head = head->prev)
 		{
-			if (node->n < node->prev->n)
+			if (head->n < head->prev->n)
 			{
-				node = swap_node(node, list);
-				swap_done = 1;
+				swap(list, head->prev, head);
 				print_list(*list);
+				flag = 1;
+				head = head->next;
 			}
-			else
-				node = node->prev;
 		}
-	}
+	} while (flag == 1);
 }
