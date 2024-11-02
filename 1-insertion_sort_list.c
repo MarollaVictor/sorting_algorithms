@@ -1,7 +1,7 @@
 #include "sort.h"
 
 /**
- * swap - swaps bigger number with
+ * swap_l - swaps bigger number with
  *	lesser one in doubly linked list
  * @a: address of 1st node
  * @b: address of 2nd node
@@ -9,7 +9,7 @@
  * Return: void
  */
 
-void swap(listint_t *a, listint_t *b)
+void swap_l(listint_t *a, listint_t *b)
 {
 	if (a->prev)
 		a->prev->next = b;
